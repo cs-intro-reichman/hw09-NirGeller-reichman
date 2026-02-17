@@ -38,21 +38,23 @@ public class List {
     
     /** GIVE Textual representation of this list. */
     public String toString() {
-        String result ="(";
-        Node current = first;
         if (first == null) {
         return "()";
     }
+    
+    String result = "(";
+    Node current = first;
 
-        while (current != null) {
-            result += current.cp;
-            if (current != null) {
+    while (current != null) {
+        result +=current.cp; 
+        if (current.next != null) {
             result += " ";
         }
-            current = current.next;
-        }
-        result += ")";
-        return result;
+        current = current.next;
+    }
+    
+    result +=")";
+    return result;
     }
 
     /** Returns the index of the first CharData object in this list
