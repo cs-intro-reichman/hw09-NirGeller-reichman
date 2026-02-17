@@ -38,10 +38,10 @@ public class List {
     
     /** GIVE Textual representation of this list. */
     public String toString() {
-        String result =" ";
+        String result ="";
         Node current = first;
 
-        while (current.next != null) {
+        while (current != null) {
             result += current.cp + " ";
             current = current.next;
         }
@@ -56,7 +56,7 @@ public class List {
 Node current = first;
 int index = 0;
 while (current != null) {
-if (current.cp.equals(chr)) {
+if (current.cp.chr == chr) {
 return index;
 }
 current = current.next;
@@ -73,7 +73,7 @@ return -1; // Value not found
     public void update(char chr) {
         Node current = first;
         while (current != null) {
-            if (current.cp.equals(chr)) {
+            if (current.cp.chr == chr) {
                 current.cp.count++;
                 return; 
             }
@@ -90,7 +90,7 @@ return -1; // Value not found
         if (first == null) {
             return false;
         }
-        if (first.cp.equals(chr)) {
+        if (first.cp.chr == chr) {
             first = first.next;
             size--;
             return true;

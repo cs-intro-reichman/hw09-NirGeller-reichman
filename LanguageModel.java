@@ -74,7 +74,7 @@ public class LanguageModel {
      it = probs.listIterator(0);
      while (it.hasNext()){
         CharData cuurdata =it.next();
-        cuurdata.p= cuurdata.count/totalchars;
+        cuurdata.p= (double) cuurdata.count/totalchars;
         sum+= cuurdata.p;
         cuurdata.cp= sum;
      }
@@ -102,15 +102,26 @@ public class LanguageModel {
 	 * @return the generated text
 	 */
 	public String generate(String initialText, int textLength) {
-		System.out.println(initialText);
-        String window = initialText;
-        for( int i=0; i<textLength; i++){
-            List windowList =CharDataMap.get(window);
-            char c =getRandomChar(windowList);
-            System.out.println(c);
-            window= window+c;
+		String window = initialText;
+    
+    if (window.length() > windowLength) {
+        window = window.substring(window.length() - windowLength);
+    }
+    
+    StringBuilder generatedText = new StringBuilder(initialText);
+
+    for (int i =0; i <textLength; i++) {
+    List windowList = CharDataMap.get(window);
+        
+        if (windowList == null) {
+         break; 
         }
-        return "";
+    char c =getRandomChar(windowList);
+    generatedText.append(c);
+        
+    window =window.substring(1) + c; 
+    }
+    return generatedText.toString();
 	}
 
     /** Returns a string representing the map of this language model. */
