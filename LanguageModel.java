@@ -38,30 +38,28 @@ public class LanguageModel {
     In in =new In(fileName);
     
     for (int i = 0; i < windowLength; i++) {
-        if (in.isEmpty()) {
+        if (!in.hasNextChar()) {
         return; 
         }
         c =in.readChar();
         window +=c; 
     }
     
-    while (!in.isEmpty()) {
-    c =in.readChar();
+    while (in.hasNextChar()) {
+        c =in.readChar();
         
         if (!CharDataMap.containsKey(window)) {
-            CharDataMap.put(window, new List());
+        CharDataMap.put(window, new List());
         }
-        List windowList = CharDataMap.get(window);
-        windowList.update(c);
-        window =window + c;
+        CharDataMap.get(window).update(c);
+        window +=c;
         window =window.substring(window.length() - windowLength);
     }
-    if (!CharDataMap.containsKey(window)) {
-    CharDataMap.put(window, new List());
-    }
-    List lastWindowList =CharDataMap.get(window);
-    lastWindowList.update(' ');
     
+    if (!CharDataMap.containsKey(window)) {
+     CharDataMap.put(window, new List());
+    }
+    CharDataMap.get(window).update(' ');
     for (List list : CharDataMap.values()) {
     calculateProbabilities(list);
     }
@@ -108,25 +106,25 @@ public class LanguageModel {
 	 * @return the generated text
 	 */
 	public String generate(String initialText, int textLength) {
-		String window = initialText;
+		String window =initialText;
     
     if (window.length() > windowLength) {
-        window = window.substring(window.length() - windowLength);
+    window =window.substring(window.length() - windowLength);
+    }
+    StringBuilder generatedText = new StringBuilder(initialText);
+    for (int i = 0; i < textLength; i++) {
+    List windowList =CharDataMap.get(window);
+        
+        if (windowList ==null) {
+        break; 
+        }
+        
+        char c =getRandomChar(windowList);
+        generatedText.append(c);
+        window +=c; 
+        window =window.substring(window.length() - windowLength);
     }
     
-    StringBuilder generatedText = new StringBuilder(initialText);
-
-    for (int i =0; i <textLength; i++) {
-    List windowList = CharDataMap.get(window);
-        
-        if (windowList == null) {
-         break; 
-        }
-    char c =getRandomChar(windowList);
-    generatedText.append(c);
-        
-    window =window.substring(1) + c; 
-    }
     return generatedText.toString();
 	}
 
