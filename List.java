@@ -45,8 +45,8 @@ public class List {
     }
 
         while (current != null) {
-            result += current.cp + " ";
-            if (current.next != null) {
+            result += current.cp;
+            if (current != null) {
             result += " ";
         }
             current = current.next;
