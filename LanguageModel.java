@@ -35,25 +35,27 @@ public class LanguageModel {
 	public void train(String fileName) {
 		String window = "";
     char c;
-    In in = new In(fileName);
+    In in =new In(fileName);
     
     for (int i = 0; i < windowLength; i++) {
-        c = in.readChar();
-        window += c; 
+        if (in.isEmpty()) {
+        return; 
+        }
+        c =in.readChar();
+        window +=c; 
     }
     
     while (!in.isEmpty()) {
-        c =in.readChar();
+    c =in.readChar();
         
         if (!CharDataMap.containsKey(window)) {
-        CharDataMap.put(window, new List());
+            CharDataMap.put(window, new List());
         }
-        List windowList =CharDataMap.get(window);
+        List windowList = CharDataMap.get(window);
         windowList.update(c);
         window =window + c;
         window =window.substring(window.length() - windowLength);
     }
-    
     if (!CharDataMap.containsKey(window)) {
     CharDataMap.put(window, new List());
     }
@@ -61,7 +63,7 @@ public class LanguageModel {
     lastWindowList.update(' ');
     
     for (List list : CharDataMap.values()) {
-        calculateProbabilities(list);
+    calculateProbabilities(list);
     }
 	}
 
